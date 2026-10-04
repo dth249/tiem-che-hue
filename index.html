@@ -894,5 +894,6 @@ init();applyTh();newOrder();setInterval(tick,250);
 (function L(t){$('cv').style.opacity=S.o?1:.25;draw($('cv'),S.face,S.left/S.max<.3?1:0,t);requestAnimationFrame(L)})(0);
 {let p=0;const T=['Đang nấu chè…','Luộc trân châu…','Pha cốt dừa…','Sắp xong rồi…'],iv=setInterval(()=>{p=Math.min(100,p+8+Math.random()*14);$('lb').style.width=p+'%';$('lp').textContent=(p|0)+'%';$('lt').textContent=T[Math.min(3,p/26|0)];if(p>=100){clearInterval(iv);setTimeout(()=>{$('ld').classList.add('hide');showMenu();setTimeout(devNote,250)},300)}},170)}
 </script>
+ <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
