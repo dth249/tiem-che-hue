@@ -1094,11 +1094,14 @@ ADS.forEach(a=>a[3]=rd(a[3],10));}
 .pbub{animation:brise2 1s ease-in infinite}
 .mbar{height:8px;border-radius:4px;background:#0002;overflow:hidden;margin-top:2px}.mbar i{display:block;height:100%}`;document.head.appendChild(st);
  const nav=$('tabs');nav.innerHTML=nav.innerHTML.replace(/<button data-t="msg".*?<\/button><button data-t="fb".*?<\/button>/s,'<button data-t="bep" onclick="go(\'bep\')"><i>🍳</i></button><button data-t="msg" onclick="go(\'msg\')"><i>📱</i><b class="bd" id="bdm"></b></button>');
+ /* giá topping/siro: mở khóa càng muộn càng đắt; giá nước: bắp 25k/kg, mỗi nước sau +2k */
+ Object.assign(PX,{tc:3,bn:3,hs:4,dx:4,kd:4,km:5,dd:5,nv:5,lt:4,dc:5,tca:6,t7:7,pb:2,td:3,bnn:3,ld:4,bap:25,cd:27,duong:29,dxl:31,kml:33,ddl:35});
+ const RP={ngo:25,dua:27,duong:29,dxr:31,kmr:33,ddr:35};
  const RAW=[['ngo','Bắp','🌽','bap'],['dua','Dừa','🥥','cd'],['duong','Đường','🍬','duong'],['dxr','Đậu xanh','🫘','dxl'],['kmr','Khoai môn','🍠','kml'],['ddr','Đậu đỏ','🫘','ddl']];
  const RK=k=>RAW.find(r=>r[0]==k),rw=k=>((G.rw||{})[k])|0,rOk=r=>{const it=IT.find(x=>x[0]==r[3]);return !it||unl(it)},lc=r=>LIQ[r[3]][1];
- window.rbuy=function(k,n){if(!spend(25*n))return;G.rw=G.rw||{};G.rw[k]=rw(k)+n;save();hud();rp()};
+ window.rbuy=function(k,n){if(!spend(RP[k]*n))return;G.rw=G.rw||{};G.rw[k]=rw(k)+n;save();hud();rp()};
  const _mk=mkHtml;mkHtml=function(){const bak=IT.slice();IT.splice(0,IT.length,...bak.filter(i=>i[1]!='l'));let h;try{h=_mk()}finally{IT.splice(0,IT.length,...bak)}
-  return '<div class="cd"><div><small><b>Nguyên liệu nấu nước</b> bán theo kg: <b>25k/kg</b>, 1kg ra 1 lít nước. Mang sang <b>🍳 Bếp</b> xay rồi nấu, đổ vào bình.</small></div></div>'+RAW.map(r=>{const ok=rOk(r);return `<div class="cd" style="${ok?'':'opacity:.5'}"><span class="ic" style="font-size:26px">${r[2]}</span><div><b>${r[1]}</b><small>${ok?'25k / kg · trong kho '+rw(r[0])+'kg':'🔒 Chưa mở khóa'}</small></div>${ok?`<button class="bt" onclick="rbuy('${r[0]}',1)">25k</button><button class="bt" style="background:#4a9fd8;box-shadow:0 3px 0 #2f78ad" onclick="rbuy('${r[0]}',5)">x5</button>`:''}</div>`}).join('')+h};
+  return '<div class="cd"><div><small><b>Nguyên liệu nấu nước</b> bán theo kg: <b>từ 25k/kg</b> (bắp 25k, mỗi loại mở sau đắt hơn 2k), 1kg ra 1 lít nước. Mang sang <b>🍳 Bếp</b> xay rồi nấu, đổ vào bình.</small></div></div>'+RAW.map(r=>{const ok=rOk(r);return `<div class="cd" style="${ok?'':'opacity:.5'}"><span class="ic" style="font-size:26px">${r[2]}</span><div><b>${r[1]}</b><small>${ok?RP[r[0]]+'k / kg · trong kho '+rw(r[0])+'kg':'🔒 Chưa mở khóa'}</small></div>${ok?`<button class="bt" onclick="rbuy('${r[0]}',1)">${RP[r[0]]}k</button><button class="bt" style="background:#4a9fd8;box-shadow:0 3px 0 #2f78ad" onclick="rbuy('${r[0]}',5)">x5</button>`:''}</div>`}).join('')+h};
  const _kho=khoHtml;khoHtml=function(){return RAW.filter(r=>rw(r[0])>0).map(r=>`<div class="cd"><span class="ic" style="font-size:26px">${r[2]}</span><div><b>${r[1]} (sống)</b><small>Mang qua Bếp để xay & nấu</small></div><b style="font-size:20px">${rw(r[0])}kg</b></div>`).join('')+_kho()};
  const K={bl:null,jug:null,pot:null,fire:0},cl=(v,a,b)=>Math.max(a,Math.min(b,v));
  const bladeP='<path d="M50 76l-15-7m15 7l15-7m-15 7l-11 9m11-9l11 9" stroke="#6c7a89" stroke-width="3.5" stroke-linecap="round" fill="none"/>';
