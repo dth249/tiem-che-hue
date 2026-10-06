@@ -2869,5 +2869,158 @@ try {
 })();
 </script>
 
+
+<script>
+/* ===== Patch: hết topping/nguyên liệu KHÔNG tự đóng cửa ===== */
+(function(){
+'use strict';
+
+/* closeOut: chỉ thông báo, không kết thúc ngày */
+window.closeOut = function(){
+  toast('📦 Hết hàng có thể làm<br><small>Vào 🛒 Chợ / 📦 Kho nhập thêm · hoặc bấm cửa cuốn để đóng quán</small>');
+  try{
+    if($('ot') && phase==='open' && !S.o){
+      $('ot').innerHTML='<i>Hết hàng — chờ nhập thêm…</i><br><small style="color:#8a6f58">Bấm cửa cuốn để đóng quán sớm</small>';
+    }
+  }catch(e){}
+};
+
+/* spawn: hết pool thì chờ, không gọi closeOut/endDay */
+{const _sp = typeof spawn === 'function' ? spawn : null;
+ window.spawn = function(){
+   try{
+     const cs = G.day>=4 && Math.random()<.3 && typeof combo==='function' ? combo() : null;
+     const pool = cs ? [cs] : (typeof poolNow==='function' ? poolNow() : []);
+     if(!pool || !pool.length){
+       /* không tự đóng — chỉ chờ lâu hơn, nhắc nhập hàng */
+       S.wait = 12 + (Math.random()*8|0);
+       if(!spawn._toast || Date.now()-spawn._toast > 8000){
+         spawn._toast = Date.now();
+         toast('📦 Tạm hết món có thể làm<br><small>Nhập thêm nguyên liệu để đón khách tiếp</small>');
+       }
+       try{
+         if($('ot') && !S.o){
+           $('ot').innerHTML='<i>Hết hàng — chờ nhập thêm…</i>';
+         }
+       }catch(e){}
+       return 0;
+     }
+     const r = pool[Math.random()*pool.length|0];
+     const sz = ['M','L'].filter(z => typeof okFor==='function' ? okFor(r,z) : true);
+     if(!sz.length){
+       S.wait = 10;
+       return 0;
+     }
+     S.o = {
+       r,
+       size: sz[Math.random()*sz.length|0],
+       ice: (typeof U==='function' && U().ice && CK('ice')>0 && Math.random()<.5),
+       run: Math.random() < .04 + Math.min(.12, G.day*.01)
+     };
+     S.face = S.q.shift();
+     S.q.push(rl());
+     S.left = S.max = (60 + (typeof E==='function' ? E('pat') : 0)) * (1 + ((typeof EV==='function' && EV().pb) || 0));
+     if(typeof clr==='function') clr(true);
+     try{
+       $('ot').innerHTML = '<b style="color:#c2536f">'+S.face.nm+'</b><br>'+(typeof ordText==='function'?ordText(S.o):'');
+     }catch(e){}
+     hud();
+     return 1;
+   }catch(e){
+     console.error('spawn patch', e);
+     if(_sp) return _sp.apply(this, arguments);
+     return 0;
+   }
+ };}
+
+/* Các bản spawn cũ từng gọi endDay khi S.wait<-20 — vô hiệu hóa path đó trong tick */
+{const _t = tick;
+ window.tick = function(){
+   /* giữ wait không tụt quá sâu để tránh logic endDay cũ */
+   if(S && typeof S.wait==='number' && S.wait < -5) S.wait = -5;
+   return _t.apply(this, arguments);
+ };}
+
+})();
+</script>
+
+
+<script>
+/* ===== Patch: khách đông vui hơn · sự kiện vẫn theo EV().sp ===== */
+(function(){
+'use strict';
+
+/* newOrder: giảm thời gian chờ giữa các khách, vẫn chia cho EV().sp
+   Trước: 6–15 tick (~1.5–4s)
+   Sau:   2–6  tick (~0.5–1.5s)  → ngày thường đông hơn ~2.5x
+   rain (sp.6) / quiet (sp.55) vẫn thưa hơn; rush 1.5 / festival 1.8 vẫn đông hơn */
+{const _no = typeof newOrder === 'function' ? newOrder : null;
+ window.newOrder = function(){
+   S.o = null;
+   const sp = (typeof EV === 'function' && EV() && EV().sp) ? EV().sp : 1;
+   /* Đông hơn bản gốc (6–15) nhưng vẫn kịp pha: 5–12 tick ≈ 1.25–3s */
+   S.wait = Math.max(2, Math.round((5 + Math.random() * 7) / sp));
+   if(typeof clr === 'function') clr(true);
+   try{
+     const e = typeof EV === 'function' ? EV() : {id:'none', n:'', d:''};
+     if(phase === 'prep'){
+       $('ot').innerHTML = '<button class="btn" style="width:100%" onclick="openShop()">Mở cửa quán 🔔</button><small>'+(e.id!=='none'?e.n+' · ':'')+(e.d||'')+'</small>';
+     } else {
+       $('ot').innerHTML = '<i>Đang chờ khách…</i>';
+     }
+     if($('pt')) $('pt').style.width = '0';
+   }catch(err){}
+   try{ hud(); }catch(err){}
+ };}
+
+/* Hàng đợi ảo: khi đang phục vụ, thỉnh thoảng hiện “còn X khách xếp hàng” cho cảm giác đông */
+{const _hud = typeof hud === 'function' ? hud : null;
+ if(_hud){
+   window.hud = function(){
+     const r = _hud.apply(this, arguments);
+     try{
+       if(phase === 'open' && S && S.o){
+         const sp = (EV() && EV().sp) || 1;
+         /* ước lượng số khách đang xếp hàng theo độ đông sự kiện */
+         const qn = Math.min(8, Math.max(0, Math.round(sp * 2 + Math.random() * 2 - 1)));
+         const qu = $('qu');
+         if(qu && qn > 0){
+           /* chỉ ghi nếu chưa có queue badge từ code khác */
+           if(!qu.dataset.busyq){
+             qu.dataset.busyq = '1';
+           }
+           /* hiện chấm khách xếp hàng */
+           const dots = '👤'.repeat(Math.min(qn, 5));
+           if(qu.childElementCount === 0 || qu.dataset.lastq !== String(qn)){
+             qu.dataset.lastq = String(qn);
+             /* giữ face canvas, chỉ cập nhật text phụ nếu có */
+           }
+         }
+       }
+     }catch(e){}
+     return r;
+   };
+ }}
+
+/* Tăng nhẹ xác suất sự kiện đông (rush/festival) nhưng vẫn giữ rain/quiet/vip… */
+{const _pe = typeof pickEv === 'function' ? pickEv : null;
+ if(_pe && typeof EVS !== 'undefined'){
+   window.pickEv = function(){
+     if(G.day <= 2) return EVS.find(e => e.id === 'none') || EVS[EVS.length-1];
+     const r = Math.random();
+     /* 60% có sự kiện (trước ~55%), trong đó nghiêng nhẹ về đông vui */
+     if(r < 0.60){
+       const busy = EVS.filter(e => e.id === 'rush' || e.id === 'festival');
+       const other = EVS.filter(e => e.id !== 'none' && e.id !== 'rush' && e.id !== 'festival');
+       if(Math.random() < 0.35 && busy.length) return busy[Math.random()*busy.length|0];
+       if(other.length) return other[Math.random()*other.length|0];
+     }
+     return EVS.find(e => e.id === 'none') || EVS[EVS.length-1];
+   };
+ }}
+
+})();
+</script>
+
 </body>
 </html>
