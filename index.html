@@ -802,7 +802,7 @@ function seizeReset(){try{localStorage.removeItem('huechev2')}catch(e){}
 /* ===== v10: trả lời đánh giá, tin nhắn kiểu điện thoại, Tu Sĩ, flycam ===== */
 {const c=document.createElement('style');c.textContent=`#app{position:relative}.who{position:relative}#ph{position:absolute;right:-8px;top:14px;font-size:17px;display:none;font-weight:800;line-height:1;text-align:center}#ph small{display:block;font-size:9px;color:#2a7fd0}
 .sms{background:#fff;border:2px solid #ecd9c3;border-radius:16px;overflow:hidden}.sr{display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid #ecd9c3}.sr:active{background:#f6ece0}.sr .sm{flex:1;min-width:0}.sr .sm b{display:block;font-size:15px}.sr .sm small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#8a6f58;font-weight:600;font-size:12.5px}.ud{width:11px;height:11px;border-radius:50%;background:#2f7de1;flex:none}
-.sh{display:flex;align-items:center;gap:8px;margin-bottom:6px}.sh button{border:0;background:none;font-size:32px;line-height:1;color:var(--org);padding:0 6px}.chat{display:flex;flex-direction:column}.sb{max-width:78%;padding:7px 11px;border-radius:18px;margin:3px 0;font-size:14px;font-weight:600;line-height:1.3;word-wrap:break-word}.sb.t{align-self:flex-start;background:#fff;border:2px solid #e2cdb8;border-bottom-left-radius:5px}.sb.m{align-self:flex-end;background:#2f7de1;color:#fff;border-bottom-right-radius:5px}
+.sh{display:flex;align-items:center;gap:8px;margin:0 0 6px;position:sticky;top:-10px;z-index:6;background:var(--pn,#fffaf0);padding:8px 0 8px;border-bottom:1px solid #ecd9c3;box-shadow:0 2px 6px rgba(80,50,20,.06)}.sh button{border:0;background:none;font-size:32px;line-height:1;color:var(--org);padding:0 6px;cursor:pointer;flex:none}.sh b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px}.chat{display:flex;flex-direction:column}.sb{max-width:78%;padding:7px 11px;border-radius:18px;margin:3px 0;font-size:14px;font-weight:600;line-height:1.3;word-wrap:break-word}.sb.t{align-self:flex-start;background:#fff;border:2px solid #e2cdb8;border-bottom-left-radius:5px}.sb.m{align-self:flex-end;background:#2f7de1;color:#fff;border-bottom-right-radius:5px}
 .si2,.rr{display:flex;gap:6px;margin-top:8px}.si2 input,.rr input{flex:1;min-width:0;border:2px solid #c9a27a;border-radius:20px;padding:8px 12px;font:700 16px 'Baloo 2',sans-serif;outline:0;background:#fff!important;color:#000!important;-webkit-text-fill-color:#000!important;caret-color:#000;opacity:1}.si2 input::placeholder,.rr input::placeholder{color:#8a8a8a;-webkit-text-fill-color:#8a8a8a}.si2{position:sticky;bottom:-10px;background:var(--pn,#fffaf0);padding:8px 0 10px;z-index:5;margin-top:6px}.si2 .bt,.rr .bt{background:#2f7de1!important;box-shadow:0 3px 0 #1f5cb0!important;border-radius:20px;padding:8px 16px;flex:none;cursor:pointer;touch-action:manipulation;position:relative;z-index:6}.sb{color:#222}.sb.m{color:#fff}.rb{font-size:12.5px;font-weight:600;margin-top:5px;padding:5px 9px;border-radius:10px}.rb.me{background:#fde6ec;color:#c2536f}.rb.c{background:#f1ece6}
 #rack{display:flex;align-items:center;gap:6px;padding:3px 10px;background:var(--wood);border-top:3px solid #a8845f;font:800 10px 'Baloo 2',sans-serif;color:var(--ink);min-height:28px}#rack i{font-style:normal;background:#fff;border:2px solid #c9b8a4;border-radius:8px;padding:0 5px;font-size:13px}#rack i small{font-size:9px;margin-left:2px}.gv.rdy{animation:pl 1s infinite}@keyframes pl{50%{transform:scale(1.07)}}
 #fcb{width:84px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.07);border:2px dashed #a8845f;border-radius:12px;font:800 10px/1.1 "Baloo 2",sans-serif;color:var(--ink);text-align:center;overflow:hidden}#fcb .pk{animation:hv 1.6s ease-in-out infinite alternate}#fcb .pk .rot ellipse{animation:rs .12s linear infinite;transform-box:fill-box;transform-origin:center}@keyframes hv{from{transform:translateY(2px)}to{transform:translateY(-3px)}}.flier{position:absolute;z-index:40;pointer-events:none;width:100px;height:116px}.flier svg{width:100px;height:116px;display:block}.flier .bd{animation:wb 1.3s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes wb{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}.flier .rot ellipse{transform-box:fill-box;transform-origin:center;animation:rs .1s linear infinite}@keyframes rs{50%{transform:scaleX(.35)}}.flier .sw{animation:sw .75s ease-in-out infinite alternate;transform-origin:30px 19px}@keyframes sw{0%{transform:rotate(-38deg)}50%{transform:rotate(8deg)}100%{transform:rotate(40deg)}}`;document.head.appendChild(c)}
@@ -2958,8 +2958,12 @@ window.closeOut = function(){
  window.newOrder = function(){
    S.o = null;
    const sp = (typeof EV === 'function' && EV() && EV().sp) ? EV().sp : 1;
-   /* Đông hơn bản gốc (6–15) nhưng vẫn kịp pha: 5–12 tick ≈ 1.25–3s */
-   S.wait = Math.max(2, Math.round((5 + Math.random() * 7) / sp));
+   /* Đánh giá cao → đông khách; đánh giá thấp → ít khách */
+   const rating = (G.rn && G.rn > 0) ? (G.rs / G.rn) : 4.5;
+   /* 5★ → ~1.25x đông, 3★ → ~0.84x, 1★ → ~0.48x */
+   const rateMul = 0.3 + 0.95 * Math.max(0.15, Math.min(1, rating / 5));
+   /* base 5–12 tick, chia cho (sự kiện × uy tín) */
+   S.wait = Math.max(2, Math.round((5 + Math.random() * 7) / (sp * rateMul)));
    if(typeof clr === 'function') clr(true);
    try{
      const e = typeof EV === 'function' ? EV() : {id:'none', n:'', d:''};
@@ -3016,6 +3020,261 @@ window.closeOut = function(){
        if(other.length) return other[Math.random()*other.length|0];
      }
      return EVS.find(e => e.id === 'none') || EVS[EVS.length-1];
+   };
+ }}
+
+})();
+</script>
+
+
+<script>
+/* ===== Patch: header tin nhắn (tên + nút quay lại) cố định trên cùng ===== */
+(function(){
+'use strict';
+/* CSS dự phòng nếu bản gốc chưa sticky */
+{const st=document.createElement('style');st.textContent=`
+#pn .sh{position:sticky!important;top:-10px!important;z-index:8!important;background:var(--pn,#fffaf0)!important;padding:8px 0 8px!important;margin:0 0 6px!important;border-bottom:1px solid #ecd9c3;display:flex;align-items:center;gap:8px}
+#pn .sh button{border:0;background:none;font-size:32px;line-height:1;color:var(--org);padding:0 6px;cursor:pointer;flex:none}
+#pn .sh b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px}
+#pn.sms-thread > h3{display:none!important}
+#pn.sms-thread{padding-top:4px}
+`;document.head.appendChild(st)}
+
+{const _rp = typeof rp === 'function' ? rp : null;
+ if(_rp){
+   rp = function(){
+     const r = _rp.apply(this, arguments);
+     try{
+       const pn = $('pn');
+       if(pn){
+         if(tab === 'msg' && CUR){
+           pn.classList.add('sms-thread');
+           /* cuộn xuống cuối hội thoại, header sticky vẫn hiện */
+           requestAnimationFrame(()=>{ pn.scrollTop = pn.scrollHeight; });
+         } else {
+           pn.classList.remove('sms-thread');
+         }
+       }
+     }catch(e){}
+     return r;
+   };
+ }}
+})();
+</script>
+
+<script>
+/* ===== Patch: thiếu hàng vẫn có khách · khách phàn nàn cụ thể rồi 1★ bỏ đi ===== */
+(function(){
+'use strict';
+
+function itemName(k){
+  if(!k) return 'hàng';
+  if(k==='cupM') return 'ly M';
+  if(k==='cupL') return 'ly L';
+  if(k==='cuplid') return 'nắp cốc';
+  if(k==='cupset') return 'muỗng + ống hút';
+  if(k==='cupstk') return 'tem dán';
+  if(k==='ice') return 'đá viên';
+  try{
+    if(typeof SOL!=='undefined' && SOL[k]) return SOL[k][0].toLowerCase();
+    if(typeof LIQ!=='undefined' && LIQ[k]) return LIQ[k][0].toLowerCase();
+    if(typeof SYR!=='undefined' && SYR[k]) return SYR[k][0].toLowerCase();
+    if(typeof IT!=='undefined'){const it=IT.find(x=>x[0]==k); if(it) return it[2].toLowerCase();}
+  }catch(e){}
+  return k;
+}
+
+/* Chỉ thiếu nghiêm trọng: dụng cụ / hết sạch topping / nước < 350ml
+   Không bắt đủ đúng loại topping theo đơn — có 1 loại topping là được */
+function totalTopping(){
+  let n=0;
+  try{ if(typeof SOL!=='undefined') Object.keys(SOL).forEach(k=>{ if(k!=='ice') n+=CK(k)|0; }); }catch(e){}
+  return n;
+}
+function totalLiqMl(){
+  let n=0;
+  try{ if(typeof LIQ!=='undefined') Object.keys(LIQ).forEach(k=>{ n+=CK(k)|0; }); }catch(e){}
+  return n;
+}
+function missForOrder(o){
+  const miss=[];
+  const z=(o&&o.size)||'M';
+  /* dụng cụ */
+  if(!CK('cupM')&&!CK('cupL')) miss.push({k:'ly', kind:'tool'});
+  else if(o && o.size && !CK('cup'+z)) miss.push({k:'ly '+z, kind:'tool'});
+  if(!CK('cuplid')) miss.push({k:'nắp cốc', kind:'tool'});
+  if(!CK('cupset')) miss.push({k:'muỗng + ống hút', kind:'tool'});
+  /* topping: chỉ khi hết sạch mọi loại */
+  if(totalTopping()<1) miss.push({k:'topping', kind:'top'});
+  /* nước: tối thiểu 350ml bất kỳ loại nào */
+  if(totalLiqMl()<350) miss.push({k:'nước', kind:'water'});
+  return miss;
+}
+
+function customerRageLeave(miss){
+  if(!S.o || S._rage) return;
+  S._rage = 1;
+  const arr = (miss&&miss.length)?miss:[{k:'đồ', kind:'tool'}];
+  const hasWater = arr.some(m=>m.kind==='water');
+  const hasTop = arr.some(m=>m.kind==='top');
+  const tools = arr.filter(m=>m.kind==='tool').map(m=>m.k);
+  let say;
+  if(hasWater){
+    const waterLines = [
+      'Bán chè mà <b>không có nước</b> thì lấy gì mà uống hả? 😡',
+      'Chè không nước là chè kiểu gì? Mở quán cho có lệ à? 💢',
+      'Hết nước rồi còn bán chè? Uống gió hả trời? 😤',
+      'Nước không đủ 350ml mà cũng dám mở quán? Thất vọng! 🤬',
+      'Gọi chè xong nhìn ly trống hoác… bán chè không cho nước thì uống cái gì?!'
+    ];
+    say = waterLines[Math.random()*waterLines.length|0];
+  } else if(hasTop){
+    const topLines = [
+      'Topping hết sạch rồi còn bán chè gì nữa? 😤',
+      'Không một hạt topping nào mà cũng mở quán? Đùa hả? 😒',
+      'Chè không topping, nước không đủ… làm ăn kiểu gì vậy trời? 💢',
+      'Mở quán mà hết sạch topping, khách uống cái gì đây? 😡'
+    ];
+    say = topLines[Math.random()*topLines.length|0];
+  } else if(tools.length){
+    const list = tools.slice(0,3).join(', ');
+    const toolLines = [
+      'Mở quán mà thiếu <b>'+list+'</b> làm gì rồi? Bực mình! 😤',
+      'Không có <b>'+list+'</b> thì phục vụ kiểu gì? Đi về đây! 😡',
+      'Gọi món xong mới biết hết <b>'+list+'</b>… mở cho vui à? 💢',
+      'Thiếu <b>'+list+'</b> mà cũng dám bán? Thất vọng hết sức! 🤬'
+    ];
+    say = toolLines[Math.random()*toolLines.length|0];
+  } else {
+    say = 'Mở quán mà đồ không đủ, làm ăn gì nổi? 😤';
+  }
+  try{
+    if($('ot')) $('ot').innerHTML = '<b style="color:#c2536f">'+(S.face&&S.face.nm||'Khách')+'</b><br><span style="color:#a94442">'+say+'</span>';
+  }catch(e){}
+  setTimeout(()=>{
+    try{
+      if(typeof leave==='function') leave('😤 '+say.replace(/<[^>]+>/g,'')+'<br><small>Đánh giá 1★</small>', 1);
+      else {
+        if(typeof rv==='function' && S.face) rv(S.face.nm, 1);
+        G.rs = (G.rs||0)+1; G.rn = (G.rn||0)+1;
+        D.turned = (D.turned||0)+1;
+        toast('😤 Khách cáu bỏ đi · 1★');
+        if(typeof newOrder==='function') newOrder();
+      }
+    }catch(e){}
+    S._rage = 0;
+  }, 1600);
+}
+
+/* Không hiện toast thiếu hàng — khách vẫn đến */
+window.closeOut = function(){ /* no-op: không tự đóng, không toast */ };
+
+window.pkMissing = function(){
+  /* vẫn chặn mở quán nếu thiếu dụng cụ tối thiểu, nhưng message cụ thể ngắn */
+  if(!CK('cupM')&&!CK('cupL')) return 'Hết ly 🥤<br><small>Vào 🛒 Chợ mua ly M hoặc L</small>';
+  if(!CK('cuplid')) return 'Hết nắp cốc 📦<br><small>Vào 🛒 Chợ mua nắp</small>';
+  if(!CK('cupset')) return 'Hết muỗng + ống hút 🥄<br><small>Vào 🛒 Chợ mua hộp muỗng + ống hút</small>';
+  return '';
+};
+
+/* spawn: luôn có khách (lấy recipe đã mở khóa, kể cả khi chưa đủ hàng) */
+{const _sp = typeof spawn === 'function' ? spawn : null;
+ window.spawn = function(){
+   try{
+     if(m >= 1380) return 0;
+     let pool = [];
+     try{
+       if(typeof poolNow==='function') pool = poolNow() || [];
+     }catch(e){}
+     /* nếu không làm được món nào → vẫn lấy recipe theo ngày (khách sẽ phàn nàn) */
+     if(!pool.length){
+       pool = (typeof REC!=='undefined'?REC:[]).filter(r=>G.day>=r[5]);
+       if(!pool.length && typeof REC!=='undefined') pool = REC.slice(0,3);
+     }
+     if(!pool.length) return 0;
+
+     const r = pool[Math.random()*pool.length|0];
+     let sz = ['M','L'];
+     try{ sz = ['M','L'].filter(z=>CK('cup'+z)>0); }catch(e){}
+     if(!sz.length) sz = ['M','L'];
+     const size = sz[Math.random()*sz.length|0];
+     S.o = {
+       r, size,
+       ice: (typeof U==='function' && U().ice && Math.random()<.5),
+       run: Math.random() < .04 + Math.min(.12, G.day*.01)
+     };
+     S._rage = 0;
+     S.face = S.q.shift();
+     S.q.push(rl());
+     S.left = S.max = (60 + (typeof E==='function' ? E('pat') : 0)) * (1 + ((typeof EV==='function' && EV().pb) || 0));
+     if(typeof clr==='function') clr(true);
+     try{
+       $('ot').innerHTML = '<b style="color:#c2536f">'+S.face.nm+'</b><br>'+(typeof ordText==='function'?ordText(S.o):'');
+     }catch(e){}
+     hud();
+
+     /* Nếu đơn không làm được → khách nhìn quanh rồi phàn nàn + 1★ */
+     const miss = missForOrder(S.o);
+     if(miss.length){
+       /* chờ 2.5–4s để người chơi thấy đơn, rồi khách bực */
+       const delay = 2500 + Math.random()*1500;
+       const oid = S.o && S.o.r;
+       setTimeout(()=>{
+         if(!S.o || S.o.r !== oid || S._rage) return;
+         const still = missForOrder(S.o);
+         if(still.length) customerRageLeave(still);
+       }, delay);
+     }
+     return 1;
+   }catch(e){
+     console.error('spawn', e);
+     if(_sp) return _sp.apply(this, arguments);
+     return 0;
+   }
+ };}
+
+/* lock: hết topping → không toast chung chung; chỉ chặn thao tác, tên món ngắn */
+{const _lock = typeof lock === 'function' ? lock : null;
+ if(_lock){
+   window.lock = function(t,k){
+     try{
+       const u = typeof U==='function' ? U() : null;
+       const ok = t==='t' ? u&&u.t.has(k) : t==='l' ? u&&u.l.has(k) : t==='y' ? u&&u.y.has(k) : u&&u.ice;
+       if(!ok){
+         toast('Chưa mở khóa 🔒');
+         return 1;
+       }
+       const id = t==='i' ? 'ice' : k;
+       if(!CK(id)){
+         /* không spam toast dài — chỉ báo tên */
+         toast('Hết '+itemName(id));
+         return 1;
+       }
+       return 0;
+     }catch(e){ return _lock.apply(this, arguments); }
+   };
+ }}
+
+/* Khi giao sai / hết kiên nhẫn: nếu đang thiếu đồ cho đơn → message phàn nàn thiếu hàng */
+{const _leave = typeof leave === 'function' ? leave : null;
+ if(_leave){
+   window.leave = function(msg, s){
+     try{
+       if(S.o && (s===1 || s==null) && !S._rage){
+         const miss = missForOrder(S.o);
+         if(miss.length){
+           /* dùng cùng giọng cáu — để leave message khớp */
+           const hasWater = miss.some(m=>m.kind==='water');
+           const hasTop = miss.some(m=>m.kind==='top');
+           const tools = miss.filter(m=>m.kind==='tool').map(m=>m.k);
+           if(hasWater) msg = '😤 Bán chè không có nước thì lấy gì uống?<br><small>Đánh giá 1★</small>';
+           else if(hasTop) msg = '😤 Hết sạch topping rồi bán chè gì nữa?<br><small>Đánh giá 1★</small>';
+           else if(tools.length) msg = '😤 Thiếu <b>'+tools.slice(0,3).join(', ')+'</b> mà cũng mở quán?<br><small>Đánh giá 1★</small>';
+           s = 1;
+         }
+       }
+     }catch(e){}
+     return _leave.call(this, msg, s==null?1:s);
    };
  }}
 
