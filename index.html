@@ -3281,5 +3281,29 @@ window.pkMissing = function(){
 })();
 </script>
 
+<style id="w1020">
+.w1020b{flex:none;height:19px;line-height:19px;text-align:center;font-size:11.5px;font-weight:800;color:#fff;letter-spacing:.2px;background:linear-gradient(90deg,#e8457a,#ff7fa8,#e8457a);white-space:nowrap;overflow:hidden;position:relative;z-index:3}
+.w1020b span{display:inline-block;animation:w1020s 2.4s ease-in-out infinite}
+@keyframes w1020s{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.awning{background:repeating-linear-gradient(90deg,#ff8fb1 0 26px,#fff 26px 52px)!important;position:relative;overflow:visible}
+.awning::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:8px;background:radial-gradient(circle at 13px 0,#ff8fb1 0 8px,#0000 8.5px) 0 0/26px 8px repeat-x,radial-gradient(circle at 13px 0,#fff 0 8px,#0000 8.5px) 26px 0/26px 8px repeat-x;pointer-events:none}
+.w1020p{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:19}
+.w1020p i{position:absolute;top:-30px;font-style:normal;will-change:transform;animation:w1020f linear infinite}
+@keyframes w1020f{0%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(22px,52vh,0) rotate(180deg)}100%{transform:translate3d(-14px,108vh,0) rotate(360deg)}}
+#ld::before,#mn::before{content:"🌹 Chào Mừng ngày Phụ nữ Việt Nam 20/10 🌹";position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;font-weight:800;font-size:14px;color:#e8457a;text-shadow:0 1px 0 #fff}
+#ld::after,#mn::after{content:"🌸 💐 🌷 🌸 💐 🌷 🌸";position:absolute;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:20px;letter-spacing:4px;pointer-events:none}
+.w1020bow{position:absolute;left:50%;bottom:30px;margin-left:-17px;font-size:32px;line-height:1;pointer-events:none;z-index:6;filter:drop-shadow(0 2px 0 #0002);animation:w1020w 2.6s ease-in-out infinite}
+#cup.none~.w1020bow{opacity:.4}.cupwrap.seal .w1020bow{animation:fly .6s ease-in forwards}
+@keyframes w1020w{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.w1020p,.w1020b span{animation:none;display:none}}
+</style>
+<script>(function(){try{
+var a=document.getElementById('app'),h=a&&a.querySelector('.hud');if(!a||!h)return;
+var b=document.createElement('div');b.className='w1020b';b.innerHTML='<span>🌹 Chào Mừng ngày Phụ nữ Việt Nam 20/10 🌹</span>';h.insertAdjacentElement('afterend',b);
+var p=document.createElement('div');p.className='w1020p';var E=['🌸','🌹','🌷','🌺','💮'];
+for(var i=0;i<10;i++){var e=document.createElement('i');e.textContent=E[i%E.length];e.style.cssText='left:'+(i*10+Math.random()*6)+'%;font-size:'+(14+Math.random()*8|0)+'px;animation-duration:'+(9+Math.random()*7).toFixed(1)+'s;animation-delay:-'+(Math.random()*12).toFixed(1)+'s;opacity:.85';p.appendChild(e)}
+a.appendChild(p);var cw=document.getElementById('cw');if(cw){var w=document.createElement('div');w.className='w1020bow';w.textContent='🎀';cw.appendChild(w)}
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content='#ff8fb1';
+}catch(e){}})()</script>
 </body>
 </html>
